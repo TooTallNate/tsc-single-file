@@ -1,0 +1,33 @@
+{
+  "name": "tsc-single-file",
+  "version": "0.0.0",
+  "description": "TypeScript single-file compiler",
+  "main": "tsc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TooTallNate/tsc-single-file.git"
+  },
+  "bin": "bin/tsc-single-file.js",
+  "keywords": [
+    "tsc",
+    "typescript",
+    "module",
+    "node",
+    "compile",
+    "single",
+    "file",
+    "ts"
+  ],
+  "author": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TooTallNate/tsc-single-file/issues"
+  },
+  "homepage": "https://github.com/TooTallNate/tsc-single-file",
+  "dependencies": {
+    "typescript-api": "~1.0.0"
+  }
+}
