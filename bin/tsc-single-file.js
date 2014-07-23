@@ -32,23 +32,6 @@ file.on('end', function () {
   process.stdout.write(result);
 });
 
-function StderrLogger() {
-}
-
-StderrLogger.prototype.information = function() { return false; }
-
-StderrLogger.prototype.debug = function() { return false; }
-
-StderrLogger.prototype.warning = function() { return false; }
-
-StderrLogger.prototype.error = function() { return false; }
-
-StderrLogger.prototype.fatal = function() { return false; }
-
-StderrLogger.prototype.log = function(s) {
-  console.error(s);
-}
-
 function getTsSettings() {
   var st = new ts.CompilationSettings();
   st.codeGenTarget = 1; // EcmaScript 5
@@ -59,7 +42,7 @@ function getTsSettings() {
 }
 
 function compileTs(file, data) {
-  var logger = new StderrLogger();
+  var logger = new ts.NullLogger();
   var settings = getTsSettings();
   var compiler = new ts.TypeScriptCompiler(logger, settings);
 
