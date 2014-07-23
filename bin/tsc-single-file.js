@@ -10,6 +10,7 @@
  */
 
 var fs = require('fs');
+var path = require('path');
 var ts = require('typescript-api');
 
 var file;
@@ -47,6 +48,9 @@ function compileTs(file, data) {
   var compiler = new ts.TypeScriptCompiler(logger, settings);
 
   var snapshot = ts.ScriptSnapshot.fromString(data);
+  var lib = path.resolve(require.resolve('typescript'), '../lib.d.ts');
+  var libSnapshot = ts.ScriptSnapshot.fromString(fs.readFileSync(lib, 'utf-8'));
+  compiler.addFile(lib, libSnapshot);
   compiler.addFile(file, snapshot);
 
   var it = compiler.compile();

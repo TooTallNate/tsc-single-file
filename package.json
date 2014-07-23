@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/TooTallNate/tsc-single-file",
   "dependencies": {
-    "typescript-api": "~1.0.0"
+    "typescript-api": "~1.0.0",
+    "typescript": "~1.0.0"
   }
 }
