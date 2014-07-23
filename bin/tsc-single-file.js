@@ -32,34 +32,17 @@ file.on('end', function () {
   process.stdout.write(result);
 });
 
-function StderrLogger() {
-}
-
-StderrLogger.prototype.information = function() { return false; }
-
-StderrLogger.prototype.debug = function() { return false; }
-
-StderrLogger.prototype.warning = function() { return false; }
-
-StderrLogger.prototype.error = function() { return false; }
-
-StderrLogger.prototype.fatal = function() { return false; }
-
-StderrLogger.prototype.log = function(s) {
-  console.error(s);
-}
-
 function getTsSettings() {
   var st = new ts.CompilationSettings();
   st.codeGenTarget = 1; // EcmaScript 5
   st.moduleGenTarget = 1; // commonjs
   st.syntacticErrors = true;
-  st.semanticErrors = false;
+  st.semanticErrors = true;
   return ts.ImmutableCompilationSettings.fromCompilationSettings(st);
 }
 
 function compileTs(file, data) {
-  var logger = new StderrLogger();
+  var logger = new ts.NullLogger();
   var settings = getTsSettings();
   var compiler = new ts.TypeScriptCompiler(logger, settings);
 
@@ -68,11 +51,27 @@ function compileTs(file, data) {
 
   var it = compiler.compile();
   var output = '';
-  var result, ix, current;
+  var result, current;
+  var files = {};
+
   while (it.moveNext()) {
     result = it.current();
-    for (ix = 0; ix < result.outputFiles.length; ix++) {
-      current = result.outputFiles[ix];
+
+    for (var i = 0; i < result.diagnostics.length; i++) {
+      var diagnostic = result.diagnostics[i];
+      var filename = diagnostic.fileName();
+      console.error(diagnostic.fileName() + ':' + diagnostic.line() + ':' + diagnostic.character() + ': ' + diagnostic.message());
+      if (filename != '/dev/stdin') {
+        if (!files[filename]) {
+          files[filename] = fs.readFileSync(filename, 'utf-8').split('\n');
+        }
+        console.error(files[filename][diagnostic.line()]);
+        console.error(new Array(diagnostic.character() + 1).join(' ') + '^')
+      }
+    }
+
+    for (var i = 0; i < result.outputFiles.length; i++) {
+      current = result.outputFiles[i];
       if (!current) { continue; }
       output += current.text;
     }
