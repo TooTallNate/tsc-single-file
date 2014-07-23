@@ -51,11 +51,27 @@ function compileTs(file, data) {
 
   var it = compiler.compile();
   var output = '';
-  var result, ix, current;
+  var result, current;
+  var files = {};
+
   while (it.moveNext()) {
     result = it.current();
-    for (ix = 0; ix < result.outputFiles.length; ix++) {
-      current = result.outputFiles[ix];
+
+    for (var i = 0; i < result.diagnostics.length; i++) {
+      var diagnostic = result.diagnostics[i];
+      var filename = diagnostic.fileName();
+      console.error(diagnostic.fileName() + ':' + diagnostic.line() + ':' + diagnostic.character() + ': ' + diagnostic.message());
+      if (filename != '/dev/stdin') {
+        if (!files[filename]) {
+          files[filename] = fs.readFileSync(filename, 'utf-8').split('\n');
+        }
+        console.error(files[filename][diagnostic.line()]);
+        console.error(new Array(diagnostic.character() + 1).join(' ') + '^')
+      }
+    }
+
+    for (var i = 0; i < result.outputFiles.length; i++) {
+      current = result.outputFiles[i];
       if (!current) { continue; }
       output += current.text;
     }
