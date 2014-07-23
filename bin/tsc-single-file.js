@@ -37,7 +37,7 @@ function getTsSettings() {
   st.codeGenTarget = 1; // EcmaScript 5
   st.moduleGenTarget = 1; // commonjs
   st.syntacticErrors = true;
-  st.semanticErrors = false;
+  st.semanticErrors = true;
   return ts.ImmutableCompilationSettings.fromCompilationSettings(st);
 }
 
